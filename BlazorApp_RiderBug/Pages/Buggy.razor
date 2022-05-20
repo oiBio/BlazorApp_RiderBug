@@ -1,0 +1,30 @@
+﻿<EditForm EditContext="EditContext"
+          OnSubmit="OnSubmit.HasDelegate ? _onSubmit : null">
+    <div>
+        Content goes here
+    </div>
+    <div>
+        <button type="submit">Submit!</button>
+    </div>
+</EditForm>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public EditContext EditContext { get; set; } = default!;
+
+    [Parameter]
+    public EventCallback<EditContext> OnSubmit { get; set; }
+
+    private async Task<EditContext> _onSubmit()
+    {
+        // do custom stuff!
+        Console.WriteLine(nameof(_onSubmit) + " before triggerd");
+
+        await OnSubmit.InvokeAsync(EditContext);
+
+        Console.WriteLine(nameof(_onSubmit) + " after triggerd");
+
+        return EditContext;
+    }
+}
